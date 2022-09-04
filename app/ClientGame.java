@@ -71,7 +71,7 @@ public class ClientGame {
 
     private synchronized void afterRollEvaluate(outcomeResponse outcome) throws InterruptedException {
         Player currentPlayer = this.service.getCurrentPlayer();
-        if (outcome.turnOver == false)
+        /*if (outcome.turnOver == false)
         {
             declarePlayerTurn();
             if (outcome.canBuyProperty)
@@ -176,7 +176,7 @@ public class ClientGame {
                     goBankrupt(response.bankruptPlayer, response.bankruptTo);
                 }
             }
-        }
+        }*/
 
         /* On to next player */
         service.doneTurn();
