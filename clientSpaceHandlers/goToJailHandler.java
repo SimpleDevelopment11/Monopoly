@@ -1,8 +1,8 @@
-package serviceSpaceHandlers;
+package clientSpaceHandlers;
 
 import app.monopolyService;
 
-public class goToJailHandler extends basicHandler{
+public class goToJailHandler extends basicHandler {
 
     public void handleLandedEvent(monopolyService service)
     {

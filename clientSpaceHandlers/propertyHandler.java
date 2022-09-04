@@ -1,10 +1,10 @@
-package serviceSpaceHandlers;
+package clientSpaceHandlers;
 
 import app.Player;
 import app.monopolyService;
 import gameSpaces.Property;
 
-public class propertyHandler extends basicHandler{
+public class propertyHandler extends basicHandler {
 
     public void handleLandedEvent(monopolyService service) {
         Player currentPlayer = service.getCurrentPlayer();
