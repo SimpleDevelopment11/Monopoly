@@ -1,4 +1,4 @@
-package outcomeHandlers;
+package serviceSpaceHandlers;
 
 public class freeParkingHandler extends basicHandler{
 

@@ -1,4 +1,4 @@
-package outcomeHandlers;
+package serviceSpaceHandlers;
 
 public class chanceCommunityHandler extends basicHandler{
 

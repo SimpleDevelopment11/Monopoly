@@ -1,7 +1,7 @@
 package gameSpaces;
 
 import app.Player;
-import outcomeHandlers.propertyHandler;
+import serviceSpaceHandlers.propertyHandler;
 
 public abstract class Property extends boardSpace implements PropertyInterface {
 

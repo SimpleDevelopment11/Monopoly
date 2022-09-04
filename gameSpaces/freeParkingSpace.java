@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.freeParkingHandler;
+import serviceSpaceHandlers.freeParkingHandler;
 
 public class freeParkingSpace extends boardSpace {
 

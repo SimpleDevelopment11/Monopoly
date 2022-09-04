@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.chanceCommunityHandler;
+import serviceSpaceHandlers.chanceCommunityHandler;
 
 public class chanceCommunitySpace extends boardSpace {
 

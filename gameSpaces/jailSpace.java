@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.jailSpaceHandler;
+import serviceSpaceHandlers.jailSpaceHandler;
 
 public class jailSpace extends boardSpace{
 

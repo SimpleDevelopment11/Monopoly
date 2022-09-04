@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.serviceSpaceHandler;
+import serviceSpaceHandlers.serviceSpaceHandler;
 
 public abstract class boardSpace {
 

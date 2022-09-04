@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.goSpaceHandler;
+import serviceSpaceHandlers.goSpaceHandler;
 
 public class goSpace extends boardSpace {
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Cards.*;
 import gameSpaces.*;
+import serviceSpaceHandlers.basicHandler;
 import responses.buyResponse;
 import responses.gameStateResponse;
 import responses.outcomeResponse;
@@ -118,7 +119,10 @@ public class monopolyService {
         boardSpace landedSpace = server.getLandedSpace();
         this.outcome.landedSpace = landedSpace;
 
-        if (landedSpace instanceof Property)
+        ((basicHandler) landedSpace.handler).landedSpace = landedSpace;
+        landedSpace.handler.handleLandedEvent(this);
+
+        /*if (landedSpace instanceof Property)
         {
             Property propertySpace = (Property) landedSpace;
             if (propertySpace.ownedBy == null && canPay(propertySpace.initialCost))
@@ -206,7 +210,7 @@ public class monopolyService {
         else if (landedSpace instanceof jailSpace)
         {
 
-        }
+        }*/
 
         return this.outcome;
     }

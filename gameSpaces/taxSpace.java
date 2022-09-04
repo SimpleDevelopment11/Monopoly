@@ -1,6 +1,6 @@
 package gameSpaces;
 
-import outcomeHandlers.taxSpaceHandler;
+import serviceSpaceHandlers.taxSpaceHandler;
 
 public class taxSpace extends boardSpace {
 
