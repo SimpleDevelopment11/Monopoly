@@ -2,6 +2,7 @@ package serviceSpaceHandlers;
 
 import app.Player;
 import app.monopolyService;
+import clientSpaceHandlers.clientSpaceHandler;
 import gameSpaces.Property;
 
 public class propertyHandler extends basicHandler{
@@ -32,5 +33,10 @@ public class propertyHandler extends basicHandler{
                 service.initBankruptcy(currentPlayer, owner);
             }
         }
+    }
+
+
+    public clientSpaceHandler getClientHandler() {
+        return new clientSpaceHandlers.propertyHandler();
     }
 }

@@ -6,4 +6,6 @@ public interface serviceSpaceHandler {
 
     void handleLandedEvent(monopolyService monoService);
 
+    clientSpaceHandlers.clientSpaceHandler getClientHandler();
+
 }

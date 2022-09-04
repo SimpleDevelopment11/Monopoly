@@ -119,10 +119,7 @@ public class monopolyService {
         boardSpace landedSpace = server.getLandedSpace();
         this.outcome.landedSpace = landedSpace;
 
-        ((basicHandler) landedSpace.handler).landedSpace = landedSpace;
-        landedSpace.handler.handleLandedEvent(this);
-
-        /*if (landedSpace instanceof Property)
+        if (landedSpace instanceof Property)
         {
             Property propertySpace = (Property) landedSpace;
             if (propertySpace.ownedBy == null && canPay(propertySpace.initialCost))
@@ -210,7 +207,7 @@ public class monopolyService {
         else if (landedSpace instanceof jailSpace)
         {
 
-        }*/
+        }
 
         return this.outcome;
     }
@@ -504,6 +501,10 @@ public class monopolyService {
     public buyResponse buyProperty(Property property)
     {
         Player currentPlayer = getCurrentPlayer();
+        if (server.getLandedSpace() != property)
+        {
+            return null;
+        }
         if (currentPlayer.readyCash < property.initialCost && canPay(property.initialCost) == false)
         {
             return new buyResponse(false, false);
