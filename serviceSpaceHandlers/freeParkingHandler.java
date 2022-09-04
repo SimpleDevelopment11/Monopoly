@@ -9,6 +9,11 @@ public class freeParkingHandler extends basicHandler{
 
     }
 
+    public serviceSpaceHandler getNewHandler()
+    {
+        return new serviceSpaceHandlers.freeParkingHandler();
+    }
+
     public clientSpaceHandler getClientHandler() {
         return new clientSpaceHandlers.freeParkingHandler();
     }

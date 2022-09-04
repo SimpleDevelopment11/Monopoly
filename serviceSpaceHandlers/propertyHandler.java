@@ -4,19 +4,25 @@ import app.Player;
 import app.monopolyService;
 import clientSpaceHandlers.clientSpaceHandler;
 import gameSpaces.Property;
+import responses.outcomeResponse;
 
 public class propertyHandler extends basicHandler{
+
+    private outcomeResponse outcome = new outcomeResponse();
 
     public void handleLandedEvent(monopolyService service) {
         Player currentPlayer = service.getCurrentPlayer();
         Property propertySpace = (Property) landedSpace;
-        if (propertySpace.ownedBy == null && service.canPay(propertySpace.initialCost))
+        if (service.logic.canBuyProperty(propertySpace, service))
         {
-            //Can buy property
+            outcome.canBuyProperty = true;
         }
         else if (propertySpace.ownedBy != null && propertySpace.ownedBy != currentPlayer)
         {
+            outcome.rentState = new outcomeResponse().new oweRent();
+            outcome.rentState.oweOrNot = true;
             int rent = propertySpace.getRent(service.server.currentRoll);
+            outcome.rentState.amountOwed = rent;
             Player owner = propertySpace.ownedBy;
             if (currentPlayer.readyCash >= rent)
             {
@@ -27,6 +33,7 @@ public class propertyHandler extends basicHandler{
             {
                 service.server.setWaitingPayment(rent);
                 service.server.setWaitingPayee(owner);
+                outcome.rentState.needToMortgage = true;
             }
             else
             {
@@ -35,8 +42,12 @@ public class propertyHandler extends basicHandler{
         }
     }
 
+    public serviceSpaceHandler getNewHandler()
+    {
+        return new serviceSpaceHandlers.propertyHandler();
+    }
 
     public clientSpaceHandler getClientHandler() {
-        return new clientSpaceHandlers.propertyHandler();
+        return new clientSpaceHandlers.propertyHandler(outcome);
     }
 }

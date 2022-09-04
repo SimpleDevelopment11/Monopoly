@@ -1,12 +1,49 @@
 package clientSpaceHandlers;
 
+import app.ClientGame;
+import app.Player;
+import app.guiBoard;
 import app.monopolyService;
+import gameSpaces.taxSpace;
+import responses.outcomeResponse;
 
 public class taxSpaceHandler extends basicHandler {
 
-    public void handleLandedEvent(monopolyService service)
-    {
+    private outcomeResponse outcome;
 
+    public taxSpaceHandler(outcomeResponse outcome)
+    {
+        super();
+        this.outcome = outcome;
+    }
+
+    public void handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
+        guiBoard myGui = parentGame.myGui;
+        taxSpace tax = (taxSpace) landedSpace;
+        myGui.createMessageDialog("Taxes...", "Cannot avoid taxes I'm afraid.", "You must pay the bank $" + tax.taxAmount + ".");
+
+        if (outcome.rentState != null && outcome.rentState.needToMortgage)
+        {
+            parentGame.arrangingFinances = true;
+            myGui.toggleButtons(false);
+            parentGame.wait();
+            outcomeResponse.bankruptState response = service.payUp();
+            if (response == null)
+            {
+                myGui.toggleButtons(true);
+            }
+            else
+            {
+                parentGame.goBankrupt(response.bankruptPlayer, response.bankruptTo);
+            }
+        }
+        else if (outcome.rentState != null && outcome.rentState.bankrupt.size() > 0)
+        {
+            for (outcomeResponse.bankruptState bankruption : outcome.rentState.bankrupt)
+            {
+                parentGame.goBankrupt(bankruption.bankruptPlayer, bankruption.bankruptTo);
+            }
+        }
     }
 
 }

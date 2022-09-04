@@ -3,6 +3,7 @@ package app;
 import java.util.ArrayList;
 
 import Cards.*;
+import clientSpaceHandlers.clientSpaceHandler;
 import gameSpaces.*;
 import serviceSpaceHandlers.basicHandler;
 import responses.buyResponse;
@@ -105,10 +106,10 @@ public class monopolyService {
         return null;
     }
 
-    public outcomeResponse determineRollOutcome(){
+    public clientSpaceHandler determineRollOutcome(){
         if (this.outcome.turnOver)
         {
-            return this.outcome;
+            return null;
         }
         outcome = new outcomeResponse();
         Player currentPlayer = getCurrentPlayer();
@@ -117,10 +118,16 @@ public class monopolyService {
             this.server.earnGoMoney();
         }
         boardSpace landedSpace = server.getLandedSpace();
-        this.outcome.landedSpace = landedSpace;
 
         ((basicHandler) landedSpace.handler).landedSpace = landedSpace;
         landedSpace.handler.handleLandedEvent(this);
+
+        clientSpaceHandler returnHandler =  landedSpace.handler.getClientHandler();
+        ((clientSpaceHandlers.basicHandler) returnHandler).landedSpace = landedSpace;
+
+        landedSpace.handler = landedSpace.handler.getNewHandler();
+
+        return returnHandler;
 
         /*if (landedSpace instanceof Property)
         {
@@ -211,8 +218,6 @@ public class monopolyService {
         {
 
         }*/
-
-        return this.outcome;
     }
 
     public void initBankruptcy(Player bankruptPlayer, Player bankrupter)
@@ -504,7 +509,7 @@ public class monopolyService {
     public buyResponse buyProperty(Property property)
     {
         Player currentPlayer = getCurrentPlayer();
-        if (server.getLandedSpace() != property)
+        if (server.getLandedSpace() != property || !logic.canBuyProperty(property, this))
         {
             return null;
         }

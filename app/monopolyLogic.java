@@ -86,4 +86,13 @@ public class monopolyLogic {
         return paymentAmount;
     }
 
+    public boolean canBuyProperty(Property propertySpace, monopolyService service)
+    {
+        if (propertySpace.ownedBy == null && service.canPay(propertySpace.initialCost))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

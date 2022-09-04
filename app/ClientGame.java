@@ -1,5 +1,7 @@
 package app;
 
+import clientSpaceHandlers.basicHandler;
+import clientSpaceHandlers.clientSpaceHandler;
 import gameSpaces.*;
 import responses.buyResponse;
 import responses.gameStateResponse;
@@ -14,7 +16,7 @@ public class ClientGame {
     public guiBoard myGui;
     private monopolyService service;
     private Board gameBoard;
-    private boolean arrangingFinances = false;
+    public boolean arrangingFinances = false;
     private Thread evaluateRollThread;
 
     public static void main(String[] args) {
@@ -54,12 +56,12 @@ public class ClientGame {
 
     public void startThread()
     {
-        outcomeResponse outcome = service.determineRollOutcome();
+        clientSpaceHandler clientHandler = service.determineRollOutcome();
         this.evaluateRollThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    afterRollEvaluate(outcome);
+                    afterRollEvaluate(clientHandler);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -69,8 +71,15 @@ public class ClientGame {
     }
 
 
-    private synchronized void afterRollEvaluate(outcomeResponse outcome) throws InterruptedException {
+    private synchronized void afterRollEvaluate(clientSpaceHandler clientHandler) throws InterruptedException {
         Player currentPlayer = this.service.getCurrentPlayer();
+
+        if (clientHandler != null)
+        {
+            ((basicHandler) clientHandler).currentPlayer = currentPlayer;
+            clientHandler.handleLandedEvent(this, this.service);
+        }
+
         /*if (outcome.turnOver == false)
         {
             declarePlayerTurn();
@@ -327,6 +336,7 @@ public class ClientGame {
         }
         declarePlayerTurn();
     }
+
 
     public boolean canAdjustProperty(Property property)
     {
