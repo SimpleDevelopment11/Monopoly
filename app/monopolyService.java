@@ -40,7 +40,7 @@ public class monopolyService {
 
     public rollResponse handleRoll(Player[] players)
     {
-        if (server.gameOver)
+        if (server.gameOver || !logic.canRoll(getCurrentPlayer()))
         {
             return null;
         }
@@ -324,7 +324,7 @@ public class monopolyService {
         {
             return;
         }
-        if (!server.onDoubles)
+        if (!server.onDoubles && !getCurrentPlayer().isBankrupt)
         {
             server.onDoubles = false;
             do
