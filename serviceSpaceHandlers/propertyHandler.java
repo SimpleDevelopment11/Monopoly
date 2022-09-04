@@ -37,7 +37,7 @@ public class propertyHandler extends basicHandler{
             }
             else
             {
-                service.initBankruptcy(currentPlayer, owner);
+                outcome = service.initBankruptcy(currentPlayer, owner, outcome);
             }
         }
     }

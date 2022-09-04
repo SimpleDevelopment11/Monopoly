@@ -18,7 +18,7 @@ public class chanceCommunityHandler extends basicHandler {
         this.outcome = outcome;
     }
 
-    public void handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
+    public synchronized boolean handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
         guiBoard myGui = parentGame.myGui;
         myGui.showDrawnCard(outcome.cardDrawn.deck.typeOfDeck, outcome.cardDrawn.drawnCard.cardMessage);
         myGui.movePlayerPiece(currentPlayer);
@@ -47,8 +47,9 @@ public class chanceCommunityHandler extends basicHandler {
         if (reset && outcome.cardDrawn.continueState)
         {
             parentGame.startThread();
-            return;
+            return false;
         }
+        return true;
     }
 
 }

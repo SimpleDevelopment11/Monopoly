@@ -87,7 +87,7 @@ public class cardQueue {
 
         communityChestDeck.add(13, new buildingPaymentsCard(40, 115, "You Are Assessed For Street Repairs. $40 Per House; $115 per Hotel", Card.cardDeckType.COMMUNITYCHEST));
 
-        communityChestDeck.add(14, new collectionsFromPlayersCard(50, "Grand Opera Opening. Collect $50 From Every mainCode.Player for opening night seats.", Card.cardDeckType.COMMUNITYCHEST));
+        communityChestDeck.add(14, new collectionsFromPlayersCard(50, "Grand Opera Opening. Collect $50 From Every Player for opening night seats.", Card.cardDeckType.COMMUNITYCHEST));
 
         communityChestDeck.add(15, new getOutOfJailFreeCard("Get Out Of Jail, Free. This card may be kept until needed or sold.", Card.cardDeckType.COMMUNITYCHEST));
 
@@ -105,7 +105,7 @@ public class cardQueue {
         chanceDeck.add(2, new advanceToCard(GO, false,"Advance TO GO", Card.cardDeckType.CHANCE));
         chanceDeck.add(3, new advanceToCard(JAIL, true,"Go Directly to Jail", Card.cardDeckType.CHANCE));
         chanceDeck.add(4, new advanceToCard(illinoisAvenue, false,"Advance to Illinois Ave.", Card.cardDeckType.CHANCE));
-        chanceDeck.add(5, new advanceToCard(boardWalk, false,"Take a Walk On the mainCode.Board Walk", Card.cardDeckType.CHANCE));
+        chanceDeck.add(5, new advanceToCard(boardWalk, false,"Take a Walk On the Board Walk", Card.cardDeckType.CHANCE));
 
         chanceDeck.add(6, new getOutOfJailFreeCard("Get Out of Jail Free Card.", Card.cardDeckType.CHANCE));
 
@@ -116,7 +116,7 @@ public class cardQueue {
 
         chanceDeck.add(10, new payToBankCard("Pay Poor Tax of $15", 15, Card.cardDeckType.CHANCE));
 
-        chanceDeck.add(11, new paymentsToPlayersCard(50,"You Have Been Elected Chairman of the mainCode.Board. Pay Each mainCode.Player $50.", Card.cardDeckType.CHANCE));
+        chanceDeck.add(11, new paymentsToPlayersCard(50,"You Have Been Elected Chairman of the Board. Pay Each Player $50.", Card.cardDeckType.CHANCE));
 
         shuffleCards(chanceDeck);
         this.cards = chanceDeck;

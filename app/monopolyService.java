@@ -129,108 +129,19 @@ public class monopolyService {
 
         return returnHandler;
 
-        /*if (landedSpace instanceof Property)
-        {
-            Property propertySpace = (Property) landedSpace;
-            if (propertySpace.ownedBy == null && canPay(propertySpace.initialCost))
-            {
-                this.outcome.canBuyProperty = true;
-            }
-            else if (propertySpace.ownedBy != null && propertySpace.ownedBy != getCurrentPlayer())
-            {
-                outcome.rentState = new outcomeResponse().new oweRent();
-                outcome.rentState.oweOrNot = true;
-                int rent = propertySpace.getRent(server.currentRoll);
-                outcome.rentState.amountOwed = rent;
-                Player owner = propertySpace.ownedBy;
-                if (getCurrentPlayer().readyCash >= rent)
-                {
-                    getCurrentPlayer().readyCash -= rent;
-                    owner.readyCash += rent;
-                }
-                else if(canPay(rent))
-                {
-                    server.setWaitingPayment(rent);
-                    server.setWaitingPayee(owner);
-                    outcome.rentState.needToMortgage = true;
-                }
-                else
-                {
-                    initBankruptcy(currentPlayer, owner);
-                }
-            }
-        }
-        else if (landedSpace instanceof chanceCommunitySpace)
-        {
-            chanceCommunitySpace deckSpace = (chanceCommunitySpace) landedSpace;
-
-            Card drawnCard = null;
-            cardQueue deck = null;
-            if (deckSpace.deck == chanceCommunitySpace.deckType.COMMUNITYCHEST) {
-                drawnCard = server.communityChestDeck.drawCard();
-                deck = server.communityChestDeck;
-            }
-            else if (deckSpace.deck == chanceCommunitySpace.deckType.CHANCE) {
-                drawnCard = server.chanceDeck.drawCard();
-                deck = server.chanceDeck;
-            }
-            outcome.cardDrawn.didDrawCard = true;
-            outcome.cardDrawn.drawnCard = drawnCard;
-            outcome.cardDrawn.deck = deck;
-            if (handleDrawnCard(deck, drawnCard))
-            {
-                deck.moveCardToBottomOfDeck();
-            }
-        }
-        else if (landedSpace instanceof goToJailSpace)
-        {
-            server.goToJail();
-            outcome.gotToJailSpace = true;
-        }
-        else if (landedSpace instanceof goSpace)
-        {
-            server.earnGoMoney();
-        }
-        else if (landedSpace instanceof freeParkingSpace)
-        {
-
-        }
-        else if (landedSpace instanceof taxSpace)
-        {
-            int taxAmount = ((taxSpace) landedSpace).taxAmount;
-            outcome.rentState = new outcomeResponse().new oweRent();
-            if (!canPay(taxAmount))
-            {
-                initBankruptcy(currentPlayer, null);
-            }
-            else if (!canPayNow(taxAmount))
-            {
-                outcome.rentState.needToMortgage = true;
-                server.setWaitingPayee(null);
-                server.setWaitingPayment(taxAmount);
-            }
-            else
-            {
-                currentPlayer.readyCash -= taxAmount;
-            }
-        }
-        else if (landedSpace instanceof jailSpace)
-        {
-
-        }*/
     }
 
-    public void initBankruptcy(Player bankruptPlayer, Player bankrupter)
+    public outcomeResponse initBankruptcy(Player bankruptPlayer, Player bankrupter, outcomeResponse outcomeIn)
     {
-        if (outcome.rentState == null)
+        if (outcomeIn.rentState == null)
         {
-            outcome.rentState = new outcomeResponse().new oweRent();
+            outcomeIn.rentState = new outcomeResponse().new oweRent();
         }
         outcomeResponse.bankruptState bankrupt = new outcomeResponse().new bankruptState();
         bankrupt.isBankrupt = true;
         bankrupt.bankruptTo = bankrupter;
         bankrupt.bankruptPlayer = bankruptPlayer;
-        outcome.rentState.bankrupt.add(bankrupt);
+        outcomeIn.rentState.bankrupt.add(bankrupt);
         bankruptPlayer.isBankrupt = true;
         int money = bankruptPlayer.readyCash;
         bankruptPlayer.readyCash = 0;
@@ -260,27 +171,29 @@ public class monopolyService {
         {
             server.gameOver = true;
         }
+
+        return outcomeIn;
     }
 
 
-    public boolean handleDrawnCard(cardQueue deck, Card drawnCard)
+    public outcomeResponse handleDrawnCard(cardQueue deck, Card drawnCard, outcomeResponse outcomeIn)
     {
-        boolean doMoveToBottom = true;
-
         Player currentPlayer = getCurrentPlayer();
         if (drawnCard instanceof advanceToCard)
         {
-            outcome.cardDrawn.continueState = true;
+            outcomeIn.cardDrawn.continueState = true;
             advanceToCard advanceCard = (advanceToCard) drawnCard;
             int space = advanceCard.advanceToSpace.spacePosition;
             boolean toJail = advanceCard.toJailAdvance;
             if (toJail)
             {
                 server.goToJail();
-                return doMoveToBottom;
             }
-            currentPlayer.previousPosition = currentPlayer.position;
-            currentPlayer.position = space;
+            else
+            {
+                currentPlayer.previousPosition = currentPlayer.position;
+                currentPlayer.position = space;
+            }
         }
         else if (drawnCard instanceof collectionCard)
         {
@@ -291,7 +204,7 @@ public class monopolyService {
         {
             server.addGetOutOfJailFreeCard(drawnCard);
             deck.removeCard();
-            doMoveToBottom = false;
+            outcomeIn.cardDrawn.moveCardToBottom = false;
         }
         else if (drawnCard instanceof collectionsFromPlayersCard)
         {
@@ -308,7 +221,7 @@ public class monopolyService {
                     }
                     else
                     {
-                        initBankruptcy(player, currentPlayer);
+                        outcomeIn = initBankruptcy(player, currentPlayer, outcomeIn);
                     }
                 }
             }
@@ -321,8 +234,7 @@ public class monopolyService {
             if (!canPay(totalAmount))
             {
                 outcome.cardDrawn.bankrupt.isBankrupt = true;
-                initBankruptcy(currentPlayer, null);
-                return doMoveToBottom;
+                outcomeIn = initBankruptcy(currentPlayer, null, outcomeIn);
             }
             if (!canPayNow(totalAmount))
             {
@@ -349,8 +261,7 @@ public class monopolyService {
             if (!canPay(amount))
             {
                 outcome.cardDrawn.bankrupt.isBankrupt = true;
-                initBankruptcy(currentPlayer, null);
-                return doMoveToBottom;
+                outcomeIn = initBankruptcy(currentPlayer, null, outcomeIn);
             }
             else if (!canPayNow(amount))
             {
@@ -370,8 +281,7 @@ public class monopolyService {
             if (!canPay(amount))
             {
                 outcome.cardDrawn.bankrupt.isBankrupt = true;
-                initBankruptcy(currentPlayer, null);
-                return doMoveToBottom;
+                outcomeIn = initBankruptcy(currentPlayer, null, outcomeIn);
             }
             else if (!canPayNow(amount))
             {
@@ -384,7 +294,7 @@ public class monopolyService {
                 currentPlayer.readyCash -= amount;
             }
         }
-        return doMoveToBottom;
+        return outcomeIn;
     }
 
     public outcomeResponse.bankruptState payUp()

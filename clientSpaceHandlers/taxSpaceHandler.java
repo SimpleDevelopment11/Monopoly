@@ -1,7 +1,6 @@
 package clientSpaceHandlers;
 
 import app.ClientGame;
-import app.Player;
 import app.guiBoard;
 import app.monopolyService;
 import gameSpaces.taxSpace;
@@ -17,7 +16,7 @@ public class taxSpaceHandler extends basicHandler {
         this.outcome = outcome;
     }
 
-    public void handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
+    public synchronized boolean handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
         guiBoard myGui = parentGame.myGui;
         taxSpace tax = (taxSpace) landedSpace;
         myGui.createMessageDialog("Taxes...", "Cannot avoid taxes I'm afraid.", "You must pay the bank $" + tax.taxAmount + ".");
@@ -26,7 +25,7 @@ public class taxSpaceHandler extends basicHandler {
         {
             parentGame.arrangingFinances = true;
             myGui.toggleButtons(false);
-            parentGame.wait();
+            wait();
             outcomeResponse.bankruptState response = service.payUp();
             if (response == null)
             {
@@ -44,6 +43,8 @@ public class taxSpaceHandler extends basicHandler {
                 parentGame.goBankrupt(bankruption.bankruptPlayer, bankruption.bankruptTo);
             }
         }
+
+        return true;
     }
 
 }

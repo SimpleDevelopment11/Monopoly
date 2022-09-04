@@ -40,6 +40,7 @@ public class outcomeResponse {
         public boolean needToMortgage = false;
         public bankruptState bankrupt = new bankruptState();
         public boolean continueState = false;
+        public boolean moveCardToBottom = true;
     }
 
 }

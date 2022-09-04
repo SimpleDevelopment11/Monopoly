@@ -8,4 +8,9 @@ public abstract class basicHandler implements clientSpaceHandler {
     public boardSpace landedSpace;
     public Player currentPlayer;
 
+    public synchronized void notifyThread()
+    {
+        notifyAll();
+    }
+
 }

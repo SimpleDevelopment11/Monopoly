@@ -17,7 +17,7 @@ public class propertyHandler extends basicHandler {
         this.outcome = outcome;
     }
 
-    public void handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
+    public synchronized boolean handleLandedEvent(ClientGame parentGame, monopolyService service) throws InterruptedException {
         parentGame.declarePlayerTurn();
         guiBoard myGui = parentGame.myGui;
         if (outcome.canBuyProperty) {
@@ -26,7 +26,7 @@ public class propertyHandler extends basicHandler {
                 buyResponse buyOption = service.buyProperty(property);
                 if (buyOption == null)
                 {
-                    return;
+                    return true;
                 }
                 if (buyOption.didBuy) {
                     myGui.changeOwnership(property);
@@ -53,11 +53,14 @@ public class propertyHandler extends basicHandler {
                 } else {
                     parentGame.goBankrupt(response.bankruptPlayer, response.bankruptTo);
                 }
-            } else if (outcome.rentState.bankrupt.size() > 0) {
+            }
+            else if (outcome.rentState.bankrupt.size() > 0) {
                 for (outcomeResponse.bankruptState bankruption : outcome.rentState.bankrupt) {
                     parentGame.goBankrupt(bankruption.bankruptPlayer, bankruption.bankruptTo);
                 }
             }
         }
+
+        return true;
     }
 }

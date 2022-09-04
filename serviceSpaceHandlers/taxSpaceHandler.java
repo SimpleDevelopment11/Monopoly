@@ -17,7 +17,7 @@ public class taxSpaceHandler extends basicHandler{
         outcome.rentState = new outcomeResponse().new oweRent();
         if (!service.canPay(taxAmount))
         {
-            service.initBankruptcy(currentPlayer, null);
+            outcome = service.initBankruptcy(currentPlayer, null, outcome);
         }
         else if (!service.canPayNow(taxAmount))
         {

@@ -5,9 +5,9 @@ import app.monopolyService;
 
 public class jailSpaceHandler extends basicHandler {
 
-    public void handleLandedEvent(ClientGame parentGame, monopolyService service)
+    public boolean handleLandedEvent(ClientGame parentGame, monopolyService service)
     {
-
+        return true;
     }
 
 }

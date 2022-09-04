@@ -1,6 +1,6 @@
 package Cards;
 
-public class Card implements java.io.Serializable {
+public class Card {
 
     public String cardMessage;
     public cardDeckType belongingDeck;

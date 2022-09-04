@@ -3,9 +3,7 @@ package app;
 import clientSpaceHandlers.basicHandler;
 import clientSpaceHandlers.clientSpaceHandler;
 import gameSpaces.*;
-import responses.buyResponse;
 import responses.gameStateResponse;
-import responses.outcomeResponse;
 import responses.rollResponse;
 
 import java.util.ArrayList;
@@ -17,14 +15,15 @@ public class ClientGame {
     private monopolyService service;
     private Board gameBoard;
     public boolean arrangingFinances = false;
-    private Thread evaluateRollThread;
+    public Thread evaluateRollThread;
+    public clientSpaceHandler currentHandler;
 
     public static void main(String[] args) {
         ClientGame clientGame = new ClientGame();
         clientGame.service = new monopolyService();
         clientGame.myGui = new guiBoard(clientGame);
         clientGame.myGui.initializeSpaces();
-        clientGame.players = new Player[4];
+        clientGame.players = new Player[2];
         for (int counter = 0; counter < clientGame.players.length; counter++)
         {
             clientGame.players[counter] = clientGame.service.addPlayer();
@@ -74,118 +73,19 @@ public class ClientGame {
     private synchronized void afterRollEvaluate(clientSpaceHandler clientHandler) throws InterruptedException {
         Player currentPlayer = this.service.getCurrentPlayer();
 
+        boolean continueFlow = true;
+
         if (clientHandler != null)
         {
             ((basicHandler) clientHandler).currentPlayer = currentPlayer;
-            clientHandler.handleLandedEvent(this, this.service);
+            currentHandler = clientHandler;
+            continueFlow = clientHandler.handleLandedEvent(this, this.service);
         }
 
-        /*if (outcome.turnOver == false)
+        if (!continueFlow)
         {
-            declarePlayerTurn();
-            if (outcome.canBuyProperty)
-            {
-                Property property = (Property) outcome.landedSpace;
-                if (myGui.askToBuy(property))
-                {
-                    buyResponse buyOption = service.buyProperty(property);
-                    if (buyOption.didBuy)
-                    {
-                        myGui.changeOwnership(property);
-                    }
-                    else if (buyOption.meedToMortgage)
-                    {
-                        arrangingFinances = true;
-                        myGui.toggleButtons(false);
-                        wait();
-                        buyOption = service.buyProperty(property);
-                        if (buyOption.didBuy)
-                        {
-                            myGui.changeOwnership(property);
-                        }
-                        myGui.toggleButtons(true);
-                    }
-                }
-            }
-            else if (outcome.rentState != null && outcome.rentState.oweOrNot == true)
-            {
-                myGui.showRentExchange((Property) outcome.landedSpace, currentPlayer, ((Property) outcome.landedSpace).ownedBy, outcome.rentState.amountOwed);
-                if (outcome.rentState.needToMortgage)
-                {
-                    arrangingFinances = true;
-                    myGui.toggleButtons(false);
-                    wait();
-                    outcomeResponse.bankruptState response = service.payUp();
-                    if (response == null)
-                    {
-                        myGui.toggleButtons(true);
-                    }
-                    else
-                    {
-                        goBankrupt(response.bankruptPlayer, response.bankruptTo);
-                    }
-                }
-                else if (outcome.rentState.bankrupt.size() > 0)
-                {
-                    for (outcomeResponse.bankruptState bankruption : outcome.rentState.bankrupt)
-                    {
-                        goBankrupt(bankruption.bankruptPlayer, bankruption.bankruptTo);
-                    }
-                }
-            }
-            else if (outcome.cardDrawn.didDrawCard)
-            {
-                myGui.showDrawnCard(outcome.cardDrawn.deck.typeOfDeck, outcome.cardDrawn.drawnCard.cardMessage);
-                myGui.movePlayerPiece(currentPlayer);
-                declarePlayerTurn();
-                boolean reset = true;
-                if (outcome.cardDrawn.bankrupt.isBankrupt)
-                {
-                    reset = false;
-                }
-                else if (outcome.cardDrawn.needToMortgage)
-                {
-                    reset = false;
-                    arrangingFinances = true;
-                    myGui.toggleButtons(false);
-                    wait();
-                    outcomeResponse.bankruptState response = service.payUp();
-                    if (response == null)
-                    {
-                        myGui.toggleButtons(true);
-                    }
-                    else
-                    {
-                        goBankrupt(response.bankruptPlayer, response.bankruptTo);
-                    }
-                }
-                if (reset && outcome.cardDrawn.continueState)
-                {
-                    startThread();
-                    return;
-                }
-            }
-            else if (outcome.gotToJailSpace)
-            {
-                myGui.createMessageDialog("Tough One", "Time to do Time...", "You landed on go to jail, so that is where you shall go.");
-                this.myGui.movePlayerPiece(currentPlayer);
-            }
-            else if (outcome.rentState != null && outcome.rentState.needToMortgage)
-            {
-                arrangingFinances = true;
-                myGui.toggleButtons(false);
-                wait();
-                outcomeResponse.bankruptState response = service.payUp();
-                if (response == null)
-                {
-                    myGui.toggleButtons(true);
-                }
-                else
-                {
-                    goBankrupt(response.bankruptPlayer, response.bankruptTo);
-                }
-            }
-        }*/
+            return;
+        }
 
         /* On to next player */
         service.doneTurn();
@@ -232,12 +132,12 @@ public class ClientGame {
         }
     }
 
-    public synchronized void arrangeFinances()
+    public void arrangeFinances()
     {
         if (this.service.canPayWaiting() || !this.service.canPayWaitingAnymore())
         {
             myGui.adjustPropertiesPane.dispose();
-            notify();
+            currentHandler.notifyThread();
         }
     }
 
