@@ -30,7 +30,7 @@ public class chanceCommunityHandler extends basicHandler{
         outcome.cardDrawn.didDrawCard = true;
         outcome.cardDrawn.drawnCard = drawnCard;
         outcome.cardDrawn.deck = deck;
-        outcome = service.handleDrawnCard(deck, drawnCard, outcome);
+        outcome = drawnCard.handler.handleCardEvent(service, outcome, drawnCard, deck);
         if (outcome.cardDrawn.moveCardToBottom)
         {
             deck.moveCardToBottomOfDeck();

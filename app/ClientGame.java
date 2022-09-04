@@ -23,7 +23,7 @@ public class ClientGame {
         clientGame.service = new monopolyService();
         clientGame.myGui = new guiBoard(clientGame);
         clientGame.myGui.initializeSpaces();
-        clientGame.players = new Player[2];
+        clientGame.players = new Player[4];
         for (int counter = 0; counter < clientGame.players.length; counter++)
         {
             clientGame.players[counter] = clientGame.service.addPlayer();
