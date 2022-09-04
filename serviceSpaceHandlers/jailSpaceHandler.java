@@ -10,6 +10,11 @@ public class jailSpaceHandler extends basicHandler{
 
     }
 
+    public serviceSpaceHandler getNewHandler()
+    {
+        return new serviceSpaceHandlers.jailSpaceHandler();
+    }
+
     public clientSpaceHandler getClientHandler() {
         return new clientSpaceHandlers.jailSpaceHandler();
     }

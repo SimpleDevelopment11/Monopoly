@@ -13,9 +13,9 @@ public class monopolyLogic {
     }
 
     //To be used if multi-client feature is implemented
-    public boolean canRoll(Player player, int currentPlayerNum)
+    public boolean canRoll(Player player)
     {
-        if (player.playerNumber == currentPlayerNum)
+        if (!player.isBankrupt)
         {
             return true;
         }
@@ -84,6 +84,15 @@ public class monopolyLogic {
         }
 
         return paymentAmount;
+    }
+
+    public boolean canBuyProperty(Property propertySpace, monopolyService service)
+    {
+        if (propertySpace.ownedBy == null && service.canPay(propertySpace.initialCost))
+        {
+            return true;
+        }
+        return false;
     }
 
 }
