@@ -268,7 +268,7 @@ public class ClientGame {
     public void declarePlayerTurn()
     {
         Player currentPlayer = this.service.getCurrentPlayer();
-        this.myGui.CONTROLPANEL.updateTurnLabel("It is mainCode.Player " + currentPlayer.playerNumber + "'s Turn!");
+        this.myGui.CONTROLPANEL.updateTurnLabel("It is Player " + currentPlayer.playerNumber + "'s Turn!");
         myGui.PLAYERINFOPANEL.changeMoneyAmount(service.getCurrentPlayer().readyCash);
     }
 

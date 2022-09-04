@@ -1,6 +1,7 @@
 package gameSpaces;
 
 import app.Player;
+import outcomeHandlers.propertyHandler;
 
 public abstract class Property extends boardSpace implements PropertyInterface {
 
@@ -19,7 +20,7 @@ public abstract class Property extends boardSpace implements PropertyInterface {
 
     public Property(int inCost, int colorGroupNum, int[] prices, int buildCost, String name, int position)
     {
-        super(position, name);
+        super(position, name, new propertyHandler());
         numberOfPropertiesInColorGroup = colorGroupNum;
         allPropertiesInColorGroup = new Property[numberOfPropertiesInColorGroup];
         initialCost = inCost;

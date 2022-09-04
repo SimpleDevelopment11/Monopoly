@@ -8,10 +8,11 @@ public abstract class boardSpace {
     public String spaceName;
     public serviceSpaceHandler handler;
 
-    public boardSpace(int position, String name)
+    public boardSpace(int position, String name, serviceSpaceHandler handler)
     {
         spacePosition = position;
         spaceName = name;
+        this.handler = handler;
     }
 
 }

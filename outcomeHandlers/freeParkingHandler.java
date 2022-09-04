@@ -1,8 +1,9 @@
 package outcomeHandlers;
 
-public class propertyHandler extends basicHandler{
+public class freeParkingHandler extends basicHandler{
 
     public void handleLandedEvent() {
 
     }
+
 }
