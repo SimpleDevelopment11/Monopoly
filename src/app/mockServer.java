@@ -113,6 +113,7 @@ public class mockServer {
     public void resetDoubles()
     {
         getCurrentPlayer().numberOfDoubles = 0;
+        onDoubles = false;
     }
 
     public void goToJail()

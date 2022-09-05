@@ -314,6 +314,10 @@ public class ClientGame {
         {
             myGui.changeOwnership(prop);
         }
+        if (this.arrangingFinances)
+        {
+            this.arrangeFinances();
+        }
     }
 
     public boolean inArray(Object[] arr, Object element)

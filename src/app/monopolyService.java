@@ -171,6 +171,10 @@ public class monopolyService {
         {
             server.gameOver = true;
         }
+        if (getCurrentPlayer().isBankrupt)
+        {
+            server.resetDoubles();
+        }
 
         return outcomeIn;
     }
@@ -324,9 +328,8 @@ public class monopolyService {
         {
             return;
         }
-        if (!server.onDoubles && !getCurrentPlayer().isBankrupt)
+        if (!server.onDoubles)
         {
-            server.onDoubles = false;
             do
             {
                 server.nextPlayerTurn();
