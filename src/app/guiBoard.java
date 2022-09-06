@@ -912,13 +912,6 @@ public class guiBoard extends JFrame {
                 raiseSingleButton = new JButton();
                 raiseSingleButton.setText("Raise on Property");
                 raiseSingleButton.setEnabled(false);
-                //if (((avenueProperty) newGame.gameBoard.boardSpaces[spaceNumber]).canRaiseOnSingleProperty(true)) {
-                if (false) {
-                    //if (newGame.myPlayer.readyCash >= ((avenueProperty) newGame.gameBoard.boardSpaces[spaceNumber]).buildingCost) {
-                    if (false) {
-                        raiseSingleButton.setEnabled(true);
-                    }
-                }
 
                 raiseSingleButton.addActionListener(new ActionListener() {
                     @Override
